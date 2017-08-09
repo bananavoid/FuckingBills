@@ -1,13 +1,69 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.spacelobster.fuckingbills.fragments.HelloFragment">
+    tools:context="com.spacelobster.fuckingbills.fragments.HelloFragment"
+    android:background="@android:color/white">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/hello_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello there!"
+        android:gravity="center"
+        android:textSize="30sp"
+        android:textColor="@android:color/holo_orange_dark"
+        android:layout_marginTop="60dp"
+        android:layout_marginStart="20dp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Drag the counters available at your place"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:textColor="@android:color/holo_orange_light"
+        android:textStyle="bold"
+        android:layout_marginStart="20dp"
+        android:layout_below="@+id/hello_text"/>
+
+    <LinearLayout
+        android:id="@+id/counters_lt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/hello_text"
+        android:layout_marginTop="60dp">
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_socket"
+            android:layout_margin="20dp"/>
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_gas"
+            android:layout_margin="20dp"/>
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_tap"
+            android:layout_margin="20dp"/>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/ic_house"
+        android:layout_marginTop="40dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/counters_lt"/>
 
 </RelativeLayout>
+</layout>
