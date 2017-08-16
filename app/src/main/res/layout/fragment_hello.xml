@@ -1,8 +1,9 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-<RelativeLayout
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.spacelobster.fuckingbills.fragments.HelloFragment"
     android:background="@android:color/white">
 
@@ -26,17 +27,45 @@
         android:textSize="16sp"
         android:textColor="@android:color/holo_orange_light"
         android:textStyle="bold"
-        android:layout_marginStart="20dp"
-        android:layout_below="@+id/hello_text"/>
+        android:layout_marginStart="20dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginEnd="60dp">
+
+        <TextView
+            android:id="@+id/electricity_counter"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="0"
+            android:gravity="center"/>
+        <TextView
+            android:id="@+id/gas_counter"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="0"
+            android:gravity="center"/>
+        <TextView
+            android:id="@+id/water_counter"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="0"
+            android:gravity="center"/>
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/counters_lt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/hello_text"
-        android:layout_marginTop="80dp">
+        android:layout_gravity="center_horizontal">
 
         <ImageView
             android:id="@+id/electricity"
@@ -65,41 +94,18 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:src="@drawable/ic_house"
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center_horizontal"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text="We are cool"
+        android:textColor="@android:color/white"
+        android:layout_gravity="center_horizontal"
+        android:background="@android:color/holo_orange_light"
         android:layout_marginTop="60dp"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/counters_lt"/>
+        android:padding="10dp"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_below="@+id/house"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="60dp"
-        android:layout_marginEnd="60dp">
-
-        <TextView
-            android:id="@+id/electricity_counter"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="0"
-            android:gravity="center"/>
-        <TextView
-            android:id="@+id/gas_counter"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="0"
-            android:gravity="center"/>
-        <TextView
-            android:id="@+id/water_counter"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="0"
-            android:gravity="center"/>
-    </LinearLayout>
-
-</RelativeLayout>
+</LinearLayout>
 </layout>
