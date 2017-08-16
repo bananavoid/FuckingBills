@@ -10,53 +10,50 @@ import android.view.View
 import android.view.View.OnLongClickListener
 import android.view.ViewGroup
 import com.spacelobster.fuckingbills.R
+import com.spacelobster.fuckingbills.RealmUtils
 import com.spacelobster.fuckingbills.databinding.FragmentHelloBinding
-import mu.KotlinLogging
+import io.realm.Realm
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
+import kotlin.properties.Delegates
 
 
-class HelloFragment : Fragment() {
+class HelloFragment : Fragment(), AnkoLogger {
 
-    private val logger = KotlinLogging.logger {}
-    private var mBinding: FragmentHelloBinding? = null
+    private var binding: FragmentHelloBinding? = null
+    private var realm: Realm by Delegates.notNull()
 
-    private var mOnCounterPressListener: OnLongClickListener = OnLongClickListener { v ->
-        logger.debug { "OnLongClickListener"}
+    private var onCounterPressListener: OnLongClickListener = OnLongClickListener { v ->
         val data = ClipData.newPlainText("", "")
         v.startDrag(data, View.DragShadowBuilder(v), null, 0)
 
         when (v.id) {
             R.id.electricity -> {
-                mBinding!!.electricityCounter.text = (mBinding!!.electricityCounter.text.toString().toInt() + 1).toString()
+                binding!!.electricityCounter.text = (binding!!.electricityCounter.text.toString().toInt() + 1).toString()
             }
             R.id.gas -> {
-                mBinding!!.gasCounter.text = (mBinding!!.gasCounter.text.toString().toInt() + 1).toString()
+                binding!!.gasCounter.text = (binding!!.gasCounter.text.toString().toInt() + 1).toString()
             }
             R.id.water -> {
-                mBinding!!.waterCounter.text = (mBinding!!.waterCounter.text.toString().toInt() + 1).toString()
+                binding!!.waterCounter.text = (binding!!.waterCounter.text.toString().toInt() + 1).toString()
             }
         }
         true
     }
 
-    private var mOnDragListener: View.OnDragListener = View.OnDragListener { v, event ->
-
-        logger.debug { "ACTION_DRAG: " + DragEvent.ACTION_DRAG_STARTED }
+    private var onCounterDragListener: View.OnDragListener = View.OnDragListener { v, event ->
 
         when (event.action) {
             DragEvent.ACTION_DRAG_STARTED -> {
-                logger.debug { "ACTION_DRAG_STARTED" }
                 true
             }
             DragEvent.ACTION_DRAG_ENTERED -> {
-                logger.debug { "ACTION_DRAG_ENTERED" }
                 true
             }
             DragEvent.ACTION_DROP -> {
-                logger.debug { "ACTION_DROP" }
                 true
             }
             DragEvent.ACTION_DRAG_ENDED -> {
-                logger.debug { "ACTION_DRAG_ENDED" }
                 true
             }
             else -> false
@@ -65,16 +62,51 @@ class HelloFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        mBinding = FragmentHelloBinding.inflate(inflater!!)
 
-        mBinding!!.electricity.setOnLongClickListener(mOnCounterPressListener)
-        mBinding!!.water.setOnLongClickListener(mOnCounterPressListener)
-        mBinding!!.gas.setOnLongClickListener(mOnCounterPressListener)
+        info("London is the capital of Great Britain")
 
-        mBinding!!.electricity.setOnDragListener(mOnDragListener)
-        mBinding!!.water.setOnDragListener(mOnDragListener)
-        mBinding!!.gas.setOnDragListener(mOnDragListener)
+        binding = FragmentHelloBinding.inflate(inflater!!)
 
-        return mBinding!!.root
+        binding!!.electricity.setOnLongClickListener(onCounterPressListener)
+        binding!!.water.setOnLongClickListener(onCounterPressListener)
+        binding!!.gas.setOnLongClickListener(onCounterPressListener)
+
+        binding!!.electricity.setOnDragListener(onCounterDragListener)
+        binding!!.water.setOnDragListener(onCounterDragListener)
+        binding!!.gas.setOnDragListener(onCounterDragListener)
+
+        binding!!.nextBtn.setOnClickListener {
+            storeCounters()
+        }
+
+        realm = Realm.getDefaultInstance()
+
+        return binding!!.root
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        realm.close() // Remember to close Realm when done.
+    }
+
+    private fun storeCounters() {
+        var electricity: Int = binding!!.electricityCounter.text.toString().toInt()
+        var gas: Int = binding!!.gasCounter.text.toString().toInt()
+        var water: Int = binding!!.waterCounter.text.toString().toInt()
+
+        while (electricity > 0) {
+            RealmUtils.createElectricityCounter(realm)
+            --electricity
+        }
+
+        while (gas > 0) {
+            RealmUtils.createGasCounter(realm)
+            --gas
+        }
+
+        while (water > 0) {
+            RealmUtils.createWaterCounter(realm)
+            --water
+        }
     }
 }

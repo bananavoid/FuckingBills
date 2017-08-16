@@ -43,7 +43,6 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     kapt 'com.android.databinding:compiler:3.0.0-alpha9'
 
-    compile 'io.github.microutils:kotlin-logging:1.4.6'
     compile "org.jetbrains.anko:anko-common:$anko_version"
 }
 

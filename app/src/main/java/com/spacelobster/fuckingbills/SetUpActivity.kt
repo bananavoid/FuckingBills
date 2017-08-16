@@ -22,7 +22,14 @@ class SetUpActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_set_up)
         realm = Realm.getDefaultInstance()
 
+        RealmUtils.deleteAllStoredStuff(realm)
+
         showHelloFragment()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        realm.close() // Remember to close Realm when done.
     }
 
     fun showHelloFragment() {
