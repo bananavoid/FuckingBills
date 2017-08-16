@@ -95,7 +95,8 @@
         android:layout_height="80dp"
         android:src="@drawable/ic_house"
         android:layout_marginTop="50dp"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_gravity="center_horizontal"
+        tools:ignore="ContentDescription" />
 
     <Button
         android:layout_width="wrap_content"
