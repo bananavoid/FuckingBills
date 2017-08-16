@@ -2,6 +2,7 @@ package com.spacelobster.fuckingbills.fragments
 
 
 import android.content.ClipData
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.DragEvent
@@ -11,6 +12,7 @@ import android.view.View.OnLongClickListener
 import android.view.ViewGroup
 import com.spacelobster.fuckingbills.R
 import com.spacelobster.fuckingbills.RealmUtils
+import com.spacelobster.fuckingbills.SetUpActivity
 import com.spacelobster.fuckingbills.databinding.FragmentHelloBinding
 import io.realm.Realm
 import org.jetbrains.anko.AnkoLogger
@@ -22,6 +24,7 @@ class HelloFragment : Fragment(), AnkoLogger {
 
     private var binding: FragmentHelloBinding? = null
     private var realm: Realm by Delegates.notNull()
+    private var  callback: SetUpActivity? = null
 
     private var onCounterPressListener: OnLongClickListener = OnLongClickListener { v ->
         val data = ClipData.newPlainText("", "")
@@ -86,7 +89,22 @@ class HelloFragment : Fragment(), AnkoLogger {
 
     override fun onDestroy() {
         super.onDestroy()
-        realm.close() // Remember to close Realm when done.
+        realm.close()
+    }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        try {
+            callback = context as SetUpActivity
+        } catch (e: ClassCastException) {
+            throw ClassCastException(context.toString() + " must implement OnSetUpListener")
+        }
+
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        callback = null
     }
 
     private fun storeCounters() {
@@ -108,5 +126,7 @@ class HelloFragment : Fragment(), AnkoLogger {
             RealmUtils.createWaterCounter(realm)
             --water
         }
+
+        callback!!.onCountersSelected()
     }
 }

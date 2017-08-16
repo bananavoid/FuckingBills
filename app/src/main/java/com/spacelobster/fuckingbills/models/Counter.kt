@@ -12,4 +12,5 @@ open class Counter : RealmObject() {
     open var name: String? = null
     open var units: String? = null
     open var value: Float? = null
+    open var cost: Float? = null
 }
