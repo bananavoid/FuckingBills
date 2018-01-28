@@ -63,8 +63,7 @@ class HelloFragment : Fragment(), AnkoLogger {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         info("London is the capital of Great Britain")
 
