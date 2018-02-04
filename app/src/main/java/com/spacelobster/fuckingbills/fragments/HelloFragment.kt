@@ -1,6 +1,7 @@
 package com.spacelobster.fuckingbills.fragments
 
 
+import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.Context
 import android.os.Bundle
@@ -30,6 +31,10 @@ class HelloFragment : Fragment(), AnkoLogger {
     private var callback: SetUpActivity? = null
     private var scaleSpringAnimationX: SpringAnimation by Delegates.notNull()
     private var scaleSpringAnimationY: SpringAnimation by Delegates.notNull()
+    companion object {
+        private const val INITIAL_HOUSE_SCALE = 1f
+        private const val MAX_HOUSE_SCALE = 1.5f
+    }
 
     private var onCounterPressListener: View.OnTouchListener = View.OnTouchListener { counterView, event ->
         if (event.action == ACTION_DOWN) {
@@ -46,13 +51,15 @@ class HelloFragment : Fragment(), AnkoLogger {
                 true
             }
             DragEvent.ACTION_DRAG_ENTERED -> {
-                scaleSpringAnimationX.animateToFinalPosition(2f)
-                scaleSpringAnimationY.animateToFinalPosition(2f)
+                scaleHouseUp()
+                true
+            }
+            DragEvent.ACTION_DRAG_EXITED -> {
+                scaleHouseDown()
                 true
             }
             DragEvent.ACTION_DROP -> {
-                scaleSpringAnimationX.animateToFinalPosition(1f)
-                scaleSpringAnimationY.animateToFinalPosition(1f)
+                scaleHouseDown()
                 processCounterDrop((event.localState as View).id)
                 true
             }
@@ -63,6 +70,17 @@ class HelloFragment : Fragment(), AnkoLogger {
         }
     }
 
+    private fun scaleHouseDown() {
+        scaleSpringAnimationX.animateToFinalPosition(INITIAL_HOUSE_SCALE)
+        scaleSpringAnimationY.animateToFinalPosition(INITIAL_HOUSE_SCALE)
+    }
+
+    private fun scaleHouseUp() {
+        scaleSpringAnimationX.animateToFinalPosition(MAX_HOUSE_SCALE)
+        scaleSpringAnimationY.animateToFinalPosition(MAX_HOUSE_SCALE)
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentHelloBinding.inflate(inflater)
 
