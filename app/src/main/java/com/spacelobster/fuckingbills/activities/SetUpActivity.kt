@@ -1,13 +1,12 @@
-package com.spacelobster.fuckingbills
+package com.spacelobster.fuckingbills.activities
 
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.spacelobster.fuckingbills.R
 import com.spacelobster.fuckingbills.databinding.ActivitySetUpBinding
 import com.spacelobster.fuckingbills.fragments.CountersDetailsFragment
 import com.spacelobster.fuckingbills.fragments.HelloFragment
-import io.realm.Realm
-import kotlin.properties.Delegates
 
 class SetUpActivity : AppCompatActivity(), OnSetUpListener {
     companion object {
@@ -15,21 +14,12 @@ class SetUpActivity : AppCompatActivity(), OnSetUpListener {
     }
 
     private var binding: ActivitySetUpBinding? = null
-    private var realm: Realm by Delegates.notNull()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_set_up)
-        realm = Realm.getDefaultInstance()
-
-        RealmUtils.deleteAllStoredStuff(realm)
 
         showHelloFragment()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        realm.close() // Remember to close Realm when done.
     }
 
     override fun onCountersSelected() {

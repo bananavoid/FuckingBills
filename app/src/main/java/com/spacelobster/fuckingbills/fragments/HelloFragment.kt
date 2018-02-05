@@ -16,10 +16,8 @@ import android.view.MotionEvent.ACTION_DOWN
 import android.view.View
 import android.view.ViewGroup
 import com.spacelobster.fuckingbills.R
-import com.spacelobster.fuckingbills.RealmUtils
-import com.spacelobster.fuckingbills.SetUpActivity
+import com.spacelobster.fuckingbills.activities.SetUpActivity
 import com.spacelobster.fuckingbills.databinding.FragmentHelloBinding
-import io.realm.Realm
 import org.jetbrains.anko.AnkoLogger
 import kotlin.properties.Delegates
 
@@ -27,7 +25,6 @@ import kotlin.properties.Delegates
 class HelloFragment : Fragment(), AnkoLogger {
 
     private var binding: FragmentHelloBinding by Delegates.notNull()
-    private var realm: Realm by Delegates.notNull()
     private var callback: SetUpActivity? = null
     private var scaleSpringAnimationX: SpringAnimation by Delegates.notNull()
     private var scaleSpringAnimationY: SpringAnimation by Delegates.notNull()
@@ -96,14 +93,7 @@ class HelloFragment : Fragment(), AnkoLogger {
 
         createScaleAnimation(binding.house)
 
-        realm = Realm.getDefaultInstance()
-
         return binding.root
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        realm.close()
     }
 
     override fun onAttach(context: Context) {
@@ -149,17 +139,17 @@ class HelloFragment : Fragment(), AnkoLogger {
         var water: Int = binding.waterCounter.text.toString().toInt()
 
         while (electricity > 0) {
-            RealmUtils.createElectricityCounter(realm)
+            // todo createElectricityCounter
             --electricity
         }
 
         while (gas > 0) {
-            RealmUtils.createGasCounter(realm)
+            // todo createGasCounter
             --gas
         }
 
         while (water > 0) {
-            RealmUtils.createWaterCounter(realm)
+            // todo createWaterCounter
             --water
         }
 
