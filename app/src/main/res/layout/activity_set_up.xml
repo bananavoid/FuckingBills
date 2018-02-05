@@ -4,7 +4,7 @@
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.spacelobster.fuckingbills.SetUpActivity">
+    tools:context="com.spacelobster.fuckingbills.activities.SetUpActivity">
 
     <FrameLayout
         android:id="@+id/fragment_container"
