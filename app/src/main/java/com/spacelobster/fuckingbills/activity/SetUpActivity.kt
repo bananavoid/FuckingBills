@@ -1,12 +1,12 @@
-package com.spacelobster.fuckingbills.activities
+package com.spacelobster.fuckingbills.activity
 
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.spacelobster.fuckingbills.R
 import com.spacelobster.fuckingbills.databinding.ActivitySetUpBinding
-import com.spacelobster.fuckingbills.fragments.CountersDetailsFragment
-import com.spacelobster.fuckingbills.fragments.HelloFragment
+import com.spacelobster.fuckingbills.fragment.CountersDetailsFragment
+import com.spacelobster.fuckingbills.fragment.HelloFragment
 
 class SetUpActivity : AppCompatActivity(), OnSetUpListener {
     companion object {

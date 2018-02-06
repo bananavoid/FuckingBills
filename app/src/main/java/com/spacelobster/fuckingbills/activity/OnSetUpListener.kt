@@ -1,4 +1,4 @@
-package com.spacelobster.fuckingbills.activities
+package com.spacelobster.fuckingbills.activity
 
 /**
  * Created by spacelobster on 8/17/17.
