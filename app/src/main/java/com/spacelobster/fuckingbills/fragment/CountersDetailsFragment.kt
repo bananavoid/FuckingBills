@@ -7,13 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
-import com.spacelobster.fuckingbills.R
 import com.spacelobster.fuckingbills.database.AppDatabase
 import com.spacelobster.fuckingbills.databinding.FragmentCountersDetailsBinding
-import com.spacelobster.fuckingbills.databinding.FragmentHelloBinding
-import com.spacelobster.fuckingbills.entity.Counter
 import kotlin.properties.Delegates
-import io.reactivex.Maybe
 import io.reactivex.schedulers.Schedulers
 
 
