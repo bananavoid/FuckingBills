@@ -8,17 +8,27 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.spacelobster.fuckingbills.R
+import com.spacelobster.fuckingbills.database.AppDatabase
+import com.spacelobster.fuckingbills.databinding.FragmentCountersDetailsBinding
+import com.spacelobster.fuckingbills.databinding.FragmentHelloBinding
+import com.spacelobster.fuckingbills.entity.Counter
+import kotlin.properties.Delegates
+import io.reactivex.Maybe
+import io.reactivex.schedulers.Schedulers
 
 
-/**
- * A simple [Fragment] subclass.
- */
 class CountersDetailsFragment : Fragment() {
 
+    private var binding: FragmentCountersDetailsBinding by Delegates.notNull()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater!!.inflate(R.layout.fragment_counters_details, container, false)
-    }
+        binding = FragmentCountersDetailsBinding.inflate(inflater)
 
-}// Required empty public constructor
+        AppDatabase.getInstance(activity!!).counterDao().getAll().subscribeOn(Schedulers.newThread())
+                .observeOn(Schedulers.newThread())
+                .subscribe({  binding.countTv.setText("THERE ARE " + it.size + " COUNTERS") })
+
+
+        return binding.root
+    }
+}

@@ -71,16 +71,6 @@ class HelloFragment : Fragment(), AnkoLogger {
         }
     }
 
-    private fun scaleHouseDown() {
-        scaleSpringAnimationX.animateToFinalPosition(INITIAL_HOUSE_SCALE)
-        scaleSpringAnimationY.animateToFinalPosition(INITIAL_HOUSE_SCALE)
-    }
-
-    private fun scaleHouseUp() {
-        scaleSpringAnimationX.animateToFinalPosition(MAX_HOUSE_SCALE)
-        scaleSpringAnimationY.animateToFinalPosition(MAX_HOUSE_SCALE)
-    }
-
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentHelloBinding.inflate(inflater)
@@ -113,6 +103,16 @@ class HelloFragment : Fragment(), AnkoLogger {
     override fun onDetach() {
         super.onDetach()
         callback = null
+    }
+
+    private fun scaleHouseDown() {
+        scaleSpringAnimationX.animateToFinalPosition(INITIAL_HOUSE_SCALE)
+        scaleSpringAnimationY.animateToFinalPosition(INITIAL_HOUSE_SCALE)
+    }
+
+    private fun scaleHouseUp() {
+        scaleSpringAnimationX.animateToFinalPosition(MAX_HOUSE_SCALE)
+        scaleSpringAnimationY.animateToFinalPosition(MAX_HOUSE_SCALE)
     }
 
     private fun createScaleAnimation(v: View) {
