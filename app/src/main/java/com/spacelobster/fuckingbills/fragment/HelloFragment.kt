@@ -22,7 +22,6 @@ import com.spacelobster.fuckingbills.databinding.FragmentHelloBinding
 import com.spacelobster.fuckingbills.entity.Counter
 import com.spacelobster.fuckingbills.enums.CounterType
 import io.reactivex.Completable
-import io.reactivex.Observable
 import org.jetbrains.anko.AnkoLogger
 import kotlin.properties.Delegates
 
