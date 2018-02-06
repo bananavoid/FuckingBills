@@ -17,7 +17,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.spacelobster.fuckingbills.R
 import com.spacelobster.fuckingbills.activity.SetUpActivity
+import com.spacelobster.fuckingbills.database.AppDatabase
 import com.spacelobster.fuckingbills.databinding.FragmentHelloBinding
+import com.spacelobster.fuckingbills.entity.Counter
+import com.spacelobster.fuckingbills.enums.CounterType
+import io.reactivex.Completable
+import io.reactivex.Observable
 import org.jetbrains.anko.AnkoLogger
 import kotlin.properties.Delegates
 
@@ -88,7 +93,8 @@ class HelloFragment : Fragment(), AnkoLogger {
         binding.house.setOnDragListener(onHouseDragListener)
 
         binding.nextBtn.setOnClickListener {
-            storeCounters()
+            callback!!.onCountersSelected()
+            Completable.fromAction { storeCounters() }
         }
 
         createScaleAnimation(binding.house)
@@ -139,20 +145,24 @@ class HelloFragment : Fragment(), AnkoLogger {
         var water: Int = binding.waterCounter.text.toString().toInt()
 
         while (electricity > 0) {
-            // todo createElectricityCounter
+            createCounter(CounterType.ELECTRICITY)
             --electricity
         }
 
         while (gas > 0) {
-            // todo createGasCounter
+            createCounter(CounterType.GAS)
             --gas
         }
 
         while (water > 0) {
-            // todo createWaterCounter
+            createCounter(CounterType.WATER)
             --water
         }
+    }
 
-        callback!!.onCountersSelected()
+    private fun createCounter(type: CounterType) {
+        val counter = Counter()
+        counter.type = type.toString()
+        AppDatabase.getInstance(activity!!).counterDao().insert(counter)
     }
 }
