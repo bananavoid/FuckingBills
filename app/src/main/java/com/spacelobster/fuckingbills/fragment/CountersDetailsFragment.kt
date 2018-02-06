@@ -1,4 +1,4 @@
-package com.spacelobster.fuckingbills.fragments
+package com.spacelobster.fuckingbills.fragment
 
 
 import android.os.Bundle

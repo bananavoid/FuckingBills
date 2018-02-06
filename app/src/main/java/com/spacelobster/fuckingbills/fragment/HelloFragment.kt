@@ -1,4 +1,4 @@
-package com.spacelobster.fuckingbills.fragments
+package com.spacelobster.fuckingbills.fragment
 
 
 import android.annotation.SuppressLint
@@ -16,7 +16,7 @@ import android.view.MotionEvent.ACTION_DOWN
 import android.view.View
 import android.view.ViewGroup
 import com.spacelobster.fuckingbills.R
-import com.spacelobster.fuckingbills.activities.SetUpActivity
+import com.spacelobster.fuckingbills.activity.SetUpActivity
 import com.spacelobster.fuckingbills.databinding.FragmentHelloBinding
 import org.jetbrains.anko.AnkoLogger
 import kotlin.properties.Delegates

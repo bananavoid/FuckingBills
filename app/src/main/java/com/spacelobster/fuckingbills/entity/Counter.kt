@@ -1,4 +1,4 @@
-package com.spacelobster.fuckingbills.entities
+package com.spacelobster.fuckingbills.entity
 
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
