@@ -21,10 +21,10 @@ class CountersDetailsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentCountersDetailsBinding.inflate(inflater)
 
-        AppDatabase.getInstance(activity!!).counterDao().getAll()
+        AppDatabase.get(activity!!).counterDao().getAll()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({  binding.countTv.setText("THERE ARE " + it.size + " COUNTERS") })
+                .subscribe({  binding.textViewAmount.setText("THERE ARE " + it.size + " COUNTERS") })
 
 
         return binding.root

@@ -6,10 +6,9 @@
     tools:context="com.spacelobster.fuckingbills.fragment.CountersDetailsFragment">
 
     <TextView
-        android:id="@+id/count_tv"
+        android:id="@+id/text_view_amount"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent"/>
 
 </FrameLayout>
 </layout>

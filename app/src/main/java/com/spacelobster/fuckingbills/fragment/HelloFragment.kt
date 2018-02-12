@@ -25,7 +25,7 @@ import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.debug
+import org.jetbrains.anko.error
 import kotlin.properties.Delegates
 
 
@@ -79,6 +79,8 @@ class HelloFragment : Fragment(), AnkoLogger {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentHelloBinding.inflate(inflater)
 
+        clearCountersIfExist()
+
         binding.electricity.setOnTouchListener(onCounterPressListener)
         binding.water.setOnTouchListener(onCounterPressListener)
         binding.gas.setOnTouchListener(onCounterPressListener)
@@ -86,11 +88,10 @@ class HelloFragment : Fragment(), AnkoLogger {
         binding.house.setOnDragListener(onHouseDragListener)
 
         binding.nextBtn.setOnClickListener {
-
             Completable.fromAction { storeCounters() }
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ callback!!.onCountersSelected() }, { debug { "ERROR" } })
+                    .subscribe({ callback!!.onCountersSelected() }, { error { "Error on counters insertion" } })
         }
 
         createScaleAnimation(binding.house)
@@ -110,6 +111,21 @@ class HelloFragment : Fragment(), AnkoLogger {
     override fun onDetach() {
         super.onDetach()
         callback = null
+    }
+
+    private fun clearCountersIfExist() {
+        AppDatabase.get(activity!!).counterDao().getAll()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    if (it.isNotEmpty()) {
+                        Completable.fromAction {
+                            AppDatabase.get(activity!!).runInTransaction {
+                                AppDatabase.get(activity!!).counterDao().deleteAllCounters()
+                            }
+                        }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe()
+                    }
+                })
     }
 
     private fun scaleHouseDown() {
@@ -169,8 +185,6 @@ class HelloFragment : Fragment(), AnkoLogger {
     private fun createCounter(type: CounterType) {
         val counter = Counter()
         counter.type = type.toString()
-        AppDatabase.getInstance(activity!!).counterDao().insert(counter)
-
-        debug { "Inserted: " + type}
+        AppDatabase.get(activity!!).counterDao().insert(counter)
     }
 }
