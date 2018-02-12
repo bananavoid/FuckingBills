@@ -22,7 +22,10 @@ import com.spacelobster.fuckingbills.databinding.FragmentHelloBinding
 import com.spacelobster.fuckingbills.entity.Counter
 import com.spacelobster.fuckingbills.enums.CounterType
 import io.reactivex.Completable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.debug
 import kotlin.properties.Delegates
 
 
@@ -83,9 +86,11 @@ class HelloFragment : Fragment(), AnkoLogger {
         binding.house.setOnDragListener(onHouseDragListener)
 
         binding.nextBtn.setOnClickListener {
-            Completable.fromAction { storeCounters() }.subscribe(
-                    { callback!!.onCountersSelected() }
-            )
+
+            Completable.fromAction { storeCounters() }
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({ callback!!.onCountersSelected() }, { debug { "ERROR" } })
         }
 
         createScaleAnimation(binding.house)
@@ -162,10 +167,10 @@ class HelloFragment : Fragment(), AnkoLogger {
     }
 
     private fun createCounter(type: CounterType) {
-        AppDatabase.getInstance(activity!!).beginTransaction()
         val counter = Counter()
         counter.type = type.toString()
         AppDatabase.getInstance(activity!!).counterDao().insert(counter)
-        AppDatabase.getInstance(activity!!).endTransaction()
+
+        debug { "Inserted: " + type}
     }
 }
