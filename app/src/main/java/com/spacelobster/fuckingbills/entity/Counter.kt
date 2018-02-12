@@ -7,7 +7,7 @@ import android.arch.persistence.room.PrimaryKey
 @Entity
 open class Counter {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     open var id: Long? = null
 
     @ColumnInfo(name = "type")

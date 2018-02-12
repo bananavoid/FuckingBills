@@ -17,8 +17,15 @@ import android.view.View
 import android.view.ViewGroup
 import com.spacelobster.fuckingbills.R
 import com.spacelobster.fuckingbills.activity.SetUpActivity
+import com.spacelobster.fuckingbills.database.AppDatabase
 import com.spacelobster.fuckingbills.databinding.FragmentHelloBinding
+import com.spacelobster.fuckingbills.entity.Counter
+import com.spacelobster.fuckingbills.enums.CounterType
+import io.reactivex.Completable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.error
 import kotlin.properties.Delegates
 
 
@@ -28,6 +35,7 @@ class HelloFragment : Fragment(), AnkoLogger {
     private var callback: SetUpActivity? = null
     private var scaleSpringAnimationX: SpringAnimation by Delegates.notNull()
     private var scaleSpringAnimationY: SpringAnimation by Delegates.notNull()
+
     companion object {
         private const val INITIAL_HOUSE_SCALE = 1f
         private const val MAX_HOUSE_SCALE = 1.5f
@@ -67,19 +75,11 @@ class HelloFragment : Fragment(), AnkoLogger {
         }
     }
 
-    private fun scaleHouseDown() {
-        scaleSpringAnimationX.animateToFinalPosition(INITIAL_HOUSE_SCALE)
-        scaleSpringAnimationY.animateToFinalPosition(INITIAL_HOUSE_SCALE)
-    }
-
-    private fun scaleHouseUp() {
-        scaleSpringAnimationX.animateToFinalPosition(MAX_HOUSE_SCALE)
-        scaleSpringAnimationY.animateToFinalPosition(MAX_HOUSE_SCALE)
-    }
-
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentHelloBinding.inflate(inflater)
+
+        clearCountersIfExist()
 
         binding.electricity.setOnTouchListener(onCounterPressListener)
         binding.water.setOnTouchListener(onCounterPressListener)
@@ -88,7 +88,10 @@ class HelloFragment : Fragment(), AnkoLogger {
         binding.house.setOnDragListener(onHouseDragListener)
 
         binding.nextBtn.setOnClickListener {
-            storeCounters()
+            Completable.fromAction { storeCounters() }
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({ callback!!.onCountersSelected() }, { error { "Error on counters insertion" } })
         }
 
         createScaleAnimation(binding.house)
@@ -108,6 +111,31 @@ class HelloFragment : Fragment(), AnkoLogger {
     override fun onDetach() {
         super.onDetach()
         callback = null
+    }
+
+    private fun clearCountersIfExist() {
+        AppDatabase.get(activity!!).counterDao().getAll()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    if (it.isNotEmpty()) {
+                        Completable.fromAction {
+                            AppDatabase.get(activity!!).runInTransaction {
+                                AppDatabase.get(activity!!).counterDao().deleteAllCounters()
+                            }
+                        }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe()
+                    }
+                })
+    }
+
+    private fun scaleHouseDown() {
+        scaleSpringAnimationX.animateToFinalPosition(INITIAL_HOUSE_SCALE)
+        scaleSpringAnimationY.animateToFinalPosition(INITIAL_HOUSE_SCALE)
+    }
+
+    private fun scaleHouseUp() {
+        scaleSpringAnimationX.animateToFinalPosition(MAX_HOUSE_SCALE)
+        scaleSpringAnimationY.animateToFinalPosition(MAX_HOUSE_SCALE)
     }
 
     private fun createScaleAnimation(v: View) {
@@ -139,20 +167,24 @@ class HelloFragment : Fragment(), AnkoLogger {
         var water: Int = binding.waterCounter.text.toString().toInt()
 
         while (electricity > 0) {
-            // todo createElectricityCounter
+            createCounter(CounterType.ELECTRICITY)
             --electricity
         }
 
         while (gas > 0) {
-            // todo createGasCounter
+            createCounter(CounterType.GAS)
             --gas
         }
 
         while (water > 0) {
-            // todo createWaterCounter
+            createCounter(CounterType.WATER)
             --water
         }
+    }
 
-        callback!!.onCountersSelected()
+    private fun createCounter(type: CounterType) {
+        val counter = Counter()
+        counter.type = type.toString()
+        AppDatabase.get(activity!!).counterDao().insert(counter)
     }
 }
