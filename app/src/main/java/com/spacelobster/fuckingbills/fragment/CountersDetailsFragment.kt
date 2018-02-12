@@ -9,6 +9,7 @@ import android.view.ViewGroup
 
 import com.spacelobster.fuckingbills.database.AppDatabase
 import com.spacelobster.fuckingbills.databinding.FragmentCountersDetailsBinding
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlin.properties.Delegates
 import io.reactivex.schedulers.Schedulers
 
@@ -21,7 +22,8 @@ class CountersDetailsFragment : Fragment() {
         binding = FragmentCountersDetailsBinding.inflate(inflater)
 
         AppDatabase.getInstance(activity!!).counterDao().getAll()
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({  binding.countTv.setText("THERE ARE " + it.size + " COUNTERS") })
 
 

@@ -32,6 +32,7 @@ class HelloFragment : Fragment(), AnkoLogger {
     private var callback: SetUpActivity? = null
     private var scaleSpringAnimationX: SpringAnimation by Delegates.notNull()
     private var scaleSpringAnimationY: SpringAnimation by Delegates.notNull()
+
     companion object {
         private const val INITIAL_HOUSE_SCALE = 1f
         private const val MAX_HOUSE_SCALE = 1.5f
@@ -82,8 +83,9 @@ class HelloFragment : Fragment(), AnkoLogger {
         binding.house.setOnDragListener(onHouseDragListener)
 
         binding.nextBtn.setOnClickListener {
-            callback!!.onCountersSelected()
-            Completable.fromAction { storeCounters() }
+            Completable.fromAction { storeCounters() }.subscribe(
+                    { callback!!.onCountersSelected() }
+            )
         }
 
         createScaleAnimation(binding.house)
@@ -160,8 +162,10 @@ class HelloFragment : Fragment(), AnkoLogger {
     }
 
     private fun createCounter(type: CounterType) {
+        AppDatabase.getInstance(activity!!).beginTransaction()
         val counter = Counter()
         counter.type = type.toString()
         AppDatabase.getInstance(activity!!).counterDao().insert(counter)
+        AppDatabase.getInstance(activity!!).endTransaction()
     }
 }
