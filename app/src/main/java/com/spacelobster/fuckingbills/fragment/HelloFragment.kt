@@ -79,7 +79,7 @@ class HelloFragment : Fragment(), AnkoLogger {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentHelloBinding.inflate(inflater)
 
-        clearCountersIfExist()
+        clearCounters()
 
         binding.electricity.setOnTouchListener(onCounterPressListener)
         binding.water.setOnTouchListener(onCounterPressListener)
@@ -113,19 +113,12 @@ class HelloFragment : Fragment(), AnkoLogger {
         callback = null
     }
 
-    private fun clearCountersIfExist() {
-        AppDatabase.get(activity!!).counterDao().getAll()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    if (it.isNotEmpty()) {
-                        Completable.fromAction {
-                            AppDatabase.get(activity!!).runInTransaction {
-                                AppDatabase.get(activity!!).counterDao().deleteAllCounters()
-                            }
-                        }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe()
-                    }
-                })
+    private fun clearCounters() {
+        Completable.fromAction {
+            AppDatabase.get(activity!!).runInTransaction {
+                AppDatabase.get(activity!!).counterDao().deleteAllCounters()
+            }
+        }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe()
     }
 
     private fun scaleHouseDown() {
