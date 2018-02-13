@@ -9,7 +9,7 @@ import com.spacelobster.fuckingbills.entity.Counter
 import com.spacelobster.fuckingbills.other.SingletonHolder
 
 
-@Database(entities = arrayOf(Counter::class), version = 2)
+@Database(entities = arrayOf(Counter::class), version = 1)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun counterDao(): CounterDao
 
