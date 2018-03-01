@@ -7,13 +7,11 @@ import com.spacelobster.fuckingbills.R
 import com.spacelobster.fuckingbills.databinding.ActivitySetUpBinding
 import com.spacelobster.fuckingbills.fragment.CountersDetailsFragment
 import com.spacelobster.fuckingbills.fragment.HelloFragment
+import kotlin.properties.Delegates
 
 class SetUpActivity : AppCompatActivity(), OnSetUpListener {
-    companion object {
-        val TAG: String = SetUpActivity::class.java.simpleName
-    }
 
-    private var binding: ActivitySetUpBinding? = null
+    private var binding: ActivitySetUpBinding by Delegates.notNull()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +32,7 @@ class SetUpActivity : AppCompatActivity(), OnSetUpListener {
         supportFragmentManager.beginTransaction().replace(
                 R.id.fragment_container,
                 HelloFragment()
-        ).commit()
+        ).commitNow()
     }
 
     private fun showDetailsFragment() {
